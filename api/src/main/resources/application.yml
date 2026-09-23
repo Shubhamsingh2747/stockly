@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: stockly-api
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when_authorized
+  health:
+    redis:
+      enabled: false
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+jwt:
+  secret: ${JWT_SECRET:local-dev-only-change-me-use-at-least-32-chars}
+  expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+
+stockly:
+  cors:
+    origins: ${STOCKLY_CORS_ORIGINS:http://localhost:5173}
+  events:
+    # Future Kafka topic. LoggingInventoryEventPublisher is used today.
+    topic: inventory.events

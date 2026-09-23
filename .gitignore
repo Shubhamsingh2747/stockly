@@ -1,0 +1,21 @@
+# Java
+api/target/
+*.class
+*.jar
+*.war
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+.vscode/
+
+# Node
+web/node_modules/
+web/dist/
+
+# Env / OS
+.env
+*.log
+.DS_Store
+Thumbs.db
