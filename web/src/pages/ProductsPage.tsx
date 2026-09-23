@@ -95,6 +95,18 @@ export default function ProductsPage() {
   return (
     <>
       <h1>Products</h1>
+      <p className="muted">
+        After you add a product, open <strong>Purchase orders</strong> to receive stock, or{" "}
+        <strong>Sales orders</strong> to sell it. Those pages are also in the top bar.
+      </p>
+      <p>
+        <Link className="btn" to="/purchases">
+          Purchase orders
+        </Link>
+        <Link className="btn secondary" to="/sales">
+          Sales orders
+        </Link>
+      </p>
       {error ? <p className="error">{error}</p> : null}
       <div className="card">
         <div className="row">
@@ -211,7 +223,14 @@ export default function ProductsPage() {
                 <td>{p.stockQuantity}</td>
                 <td>{p.unitPrice}</td>
                 <td>
-                  <Link to={`/products/${p.id}/movements`}>History</Link>
+                  <div className="actions">
+                    <Link className="btn" to={`/purchases?productId=${p.id}`}>
+                      Receive stock
+                    </Link>
+                    <Link className="btn secondary" to={`/sales?productId=${p.id}`}>
+                      Sell
+                    </Link>
+                    <Link to={`/products/${p.id}/movements`}>History</Link>
                   {admin ? (
                     <>
                       {" "}
@@ -234,6 +253,7 @@ export default function ProductsPage() {
                       </button>
                     </>
                   ) : null}
+                  </div>
                 </td>
               </tr>
             ))}

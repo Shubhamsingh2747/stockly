@@ -28,9 +28,15 @@ export default function App() {
         </NavLink>
         {user ? (
           <>
-            <NavLink to="/">Products</NavLink>
-            <NavLink to="/sales">Sales</NavLink>
-            <NavLink to="/purchases">Purchases</NavLink>
+            <NavLink className="page-link" to="/">
+              Products
+            </NavLink>
+            <NavLink className="page-link" to="/sales">
+              Sales orders
+            </NavLink>
+            <NavLink className="page-link" to="/purchases">
+              Purchase orders
+            </NavLink>
             <span className="muted">
               {user.email} ({user.role})
             </span>

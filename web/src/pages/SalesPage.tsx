@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { api, ApiError } from "../api";
 
 type Product = { id: number; sku: string; name: string; stockQuantity: number };
@@ -6,9 +7,10 @@ type Line = { productId: number; sku: string; quantity: number; unitPrice: numbe
 type Order = { id: number; status: string; createdByEmail: string; createdAt: string; lines: Line[] };
 
 export default function SalesPage() {
+  const [searchParams] = useSearchParams();
   const [orders, setOrders] = useState<Order[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
-  const [productId, setProductId] = useState("");
+  const [productId, setProductId] = useState(searchParams.get("productId") ?? "");
   const [quantity, setQuantity] = useState("1");
   const [error, setError] = useState("");
 
@@ -21,7 +23,10 @@ export default function SalesPage() {
       ]);
       setOrders(list);
       setProducts(catalog);
-      if (!productId && catalog[0]) {
+      const requested = searchParams.get("productId");
+      if (requested && catalog.some((p) => String(p.id) === requested)) {
+        setProductId(requested);
+      } else if (!productId && catalog[0]) {
         setProductId(String(catalog[0].id));
       }
     } catch (err) {

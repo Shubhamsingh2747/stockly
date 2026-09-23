@@ -37,10 +37,44 @@ a {
   text-decoration: none;
 }
 
+.nav .page-link {
+  background: #243044;
+  color: #e8eef8;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+}
+
+.nav .page-link.active {
+  background: #2d6cdf;
+  color: #fff;
+}
+
 .nav .brand {
   font-weight: 700;
   color: #fff;
   margin-right: auto;
+}
+
+a.btn {
+  display: inline-block;
+  margin: 0.35rem 0.45rem 0 0;
+  background: #2d6cdf;
+  color: white;
+  border-radius: 8px;
+  padding: 0.4rem 0.75rem;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+a.btn.secondary {
+  background: #3a4658;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
 }
 
 .card {
