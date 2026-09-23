@@ -147,6 +147,44 @@ a.btn.secondary {
   flex-wrap: wrap;
   gap: 0.4rem;
   align-items: center;
+  justify-content: flex-end;
+}
+
+.col-actions {
+  text-align: right;
+}
+
+.actions .btn,
+.actions .btn-edit {
+  margin: 0;
+}
+
+button.btn-edit {
+  margin-top: 0;
+  background: var(--brass);
+  color: #fff;
+  border: 0;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.82rem;
+}
+
+button.btn-edit:hover {
+  background: #7e633e;
+}
+
+.history-link {
+  margin-left: 0.25rem;
+  padding-left: 0.75rem;
+  border-left: 1px solid var(--line);
+  color: var(--navy);
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.history-link:hover {
+  color: var(--brass);
 }
 
 .card {

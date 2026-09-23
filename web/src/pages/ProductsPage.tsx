@@ -273,7 +273,7 @@ export default function ProductsPage() {
               <th>Category</th>
               <th>Qty</th>
               <th>Price</th>
-              <th></th>
+              <th className="col-actions">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -286,7 +286,7 @@ export default function ProductsPage() {
                 <td>{p.categoryName}</td>
                 <td>{p.stockQuantity}</td>
                 <td>{p.unitPrice}</td>
-                <td>
+                <td className="col-actions">
                   <div className="actions">
                     <Link className="btn" to={`/purchases?productId=${p.id}`}>
                       Receive stock
@@ -294,12 +294,9 @@ export default function ProductsPage() {
                     <Link className="btn secondary" to={`/sales?productId=${p.id}`}>
                       Sell
                     </Link>
-                    <Link to={`/products/${p.id}/movements`}>History</Link>
-                  {admin ? (
-                    <>
-                      {" "}
+                    {admin ? (
                       <button
-                        className="secondary"
+                        className="btn-edit"
                         type="button"
                         onClick={() => {
                           setEditingId(p.id);
@@ -311,12 +308,15 @@ export default function ProductsPage() {
                             stockQuantity: String(p.stockQuantity),
                             reorderLevel: String(p.reorderLevel),
                           });
+                          window.scrollTo({ top: 0, behavior: "smooth" });
                         }}
                       >
                         Edit
                       </button>
-                    </>
-                  ) : null}
+                    ) : null}
+                    <Link className="history-link" to={`/products/${p.id}/movements`}>
+                      View history
+                    </Link>
                   </div>
                 </td>
               </tr>
