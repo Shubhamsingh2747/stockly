@@ -1,8 +1,10 @@
 import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { api, ApiError, setSession, User } from "../api";
+import { api, ApiError, type User } from "../api";
+import { useAuth } from "../auth";
 
 export default function RegisterPage() {
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,7 +18,7 @@ export default function RegisterPage() {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });
-      setSession(result.token, result.user);
+      login(result.token, result.user);
       navigate("/");
     } catch (err) {
       setError((err as ApiError).message);

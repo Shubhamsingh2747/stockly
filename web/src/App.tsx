@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import { Navigate, NavLink, Route, Routes } from "react-router-dom";
-import { clearSession, getUser } from "./api";
+import { Navigate, NavLink, Route, Routes, useNavigate } from "react-router-dom";
+import { AuthProvider, useAuth } from "./auth";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProductsPage from "./pages/ProductsPage";
@@ -9,21 +9,28 @@ import PurchasesPage from "./pages/PurchasesPage";
 import MovementsPage from "./pages/MovementsPage";
 
 function Guard({ children }: { children: ReactNode }) {
-  return getUser() ? <>{children}</> : <Navigate to="/login" replace />;
+  const { user } = useAuth();
+  return user ? <>{children}</> : <Navigate to="/login" replace />;
 }
 
-export default function App() {
-  const user = getUser();
+function GuestOnly({ children }: { children: ReactNode }) {
+  const { user } = useAuth();
+  return user ? <Navigate to="/" replace /> : <>{children}</>;
+}
 
-  function logout() {
-    clearSession();
-    window.location.href = "/login";
+function Shell() {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  function onLogout() {
+    logout();
+    navigate("/login", { replace: true });
   }
 
   return (
     <div className="layout">
       <nav className="nav">
-        <NavLink className="brand" to="/">
+        <NavLink className="brand" to={user ? "/" : "/login"}>
           Stockly
         </NavLink>
         {user ? (
@@ -31,29 +38,41 @@ export default function App() {
             <NavLink className="page-link" to="/">
               Products
             </NavLink>
-            <NavLink className="page-link" to="/sales">
-              Sales orders
-            </NavLink>
-            <NavLink className="page-link" to="/purchases">
-              Purchase orders
-            </NavLink>
             <span className="muted">
               {user.email} ({user.role})
             </span>
-            <button className="secondary" type="button" onClick={logout}>
+            <button className="secondary" type="button" onClick={onLogout}>
               Log out
             </button>
           </>
         ) : (
           <>
-            <NavLink to="/login">Login</NavLink>
-            <NavLink to="/register">Register</NavLink>
+            <NavLink className="page-link" to="/login">
+              Login
+            </NavLink>
+            <NavLink className="page-link" to="/register">
+              Register
+            </NavLink>
           </>
         )}
       </nav>
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route
+          path="/login"
+          element={
+            <GuestOnly>
+              <LoginPage />
+            </GuestOnly>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <GuestOnly>
+              <RegisterPage />
+            </GuestOnly>
+          }
+        />
         <Route
           path="/"
           element={
@@ -88,5 +107,13 @@ export default function App() {
         />
       </Routes>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <Shell />
+    </AuthProvider>
   );
 }

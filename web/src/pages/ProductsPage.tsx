@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { api, ApiError, getUser } from "../api";
+import { api, ApiError } from "../api";
+import { useAuth } from "../auth";
 
 type Category = { id: number; name: string };
 type Product = {
@@ -16,7 +17,8 @@ type Product = {
 };
 
 export default function ProductsPage() {
-  const admin = getUser()?.role === "ADMIN";
+  const { user } = useAuth();
+  const admin = user?.role === "ADMIN";
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [sku, setSku] = useState("");
@@ -95,10 +97,6 @@ export default function ProductsPage() {
   return (
     <>
       <h1>Products</h1>
-      <p className="muted">
-        After you add a product, open <strong>Purchase orders</strong> to receive stock, or{" "}
-        <strong>Sales orders</strong> to sell it. Those pages are also in the top bar.
-      </p>
       <p>
         <Link className="btn" to="/purchases">
           Purchase orders
