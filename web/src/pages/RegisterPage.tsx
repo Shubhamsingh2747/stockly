@@ -6,6 +6,7 @@ import { useAuth } from "../auth";
 export default function RegisterPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -16,7 +17,7 @@ export default function RegisterPage() {
     try {
       const result = await api<{ token: string; user: User }>("/api/v1/auth/register", {
         method: "POST",
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username, email, password }),
       });
       login(result.token, result.user);
       navigate("/");
@@ -26,9 +27,12 @@ export default function RegisterPage() {
   }
 
   return (
-    <form className="card" onSubmit={onSubmit} style={{ maxWidth: 420 }}>
+    <div className="auth-wrap">
+    <form className="card" onSubmit={onSubmit}>
       <h1>Register</h1>
       {error ? <p className="error">{error}</p> : null}
+      <label>Username</label>
+      <input value={username} onChange={(e) => setUsername(e.target.value)} minLength={3} maxLength={32} required />
       <label>Email</label>
       <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" required />
       <label>Password (min 8)</label>
@@ -38,5 +42,6 @@ export default function RegisterPage() {
         <Link to="/login">Already have an account</Link>
       </p>
     </form>
+    </div>
   );
 }

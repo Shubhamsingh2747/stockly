@@ -34,28 +34,27 @@ function Shell() {
           Stockly
         </NavLink>
         {user ? (
-          <>
-            <NavLink className="page-link" to="/">
-              Products
-            </NavLink>
-            <span className="muted">
-              {user.email} ({user.role})
-            </span>
-            <button className="secondary" type="button" onClick={onLogout}>
-              Log out
+          <div className="nav-end">
+            <div className="user-block">
+              <span className="user-name">{user.username || user.email.split("@")[0]}</span>
+              <span className="user-role">{user.role === "ADMIN" ? "Administrator" : "User"}</span>
+            </div>
+            <button className="logout" type="button" onClick={onLogout}>
+              Sign out
             </button>
-          </>
+          </div>
         ) : (
-          <>
+          <div className="nav-end">
             <NavLink className="page-link" to="/login">
-              Login
+              Sign in
             </NavLink>
             <NavLink className="page-link" to="/register">
               Register
             </NavLink>
-          </>
+          </div>
         )}
       </nav>
+      <div className="content">
       <Routes>
         <Route
           path="/login"
@@ -106,6 +105,7 @@ function Shell() {
           }
         />
       </Routes>
+      </div>
     </div>
   );
 }

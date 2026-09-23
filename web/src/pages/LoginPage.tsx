@@ -26,9 +26,10 @@ export default function LoginPage() {
   }
 
   return (
-    <form className="card" onSubmit={onSubmit} style={{ maxWidth: 420 }}>
-      <h1>Login</h1>
-      <p className="muted">Demo admin is pre-filled. Register another user if you want.</p>
+    <div className="auth-wrap">
+    <form className="card" onSubmit={onSubmit}>
+      <h1>Sign in</h1>
+      <p className="muted">Use your registered email. Demo administrator: admin@stockly.local</p>
       {error ? <p className="error">{error}</p> : null}
       <label>Email</label>
       <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" required />
@@ -39,5 +40,6 @@ export default function LoginPage() {
         <Link to="/register">Create an account</Link>
       </p>
     </form>
+    </div>
   );
 }

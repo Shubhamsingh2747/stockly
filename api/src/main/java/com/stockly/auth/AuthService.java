@@ -28,7 +28,11 @@ public class AuthService {
         if (userRepository.existsByEmailIgnoreCase(request.email())) {
             throw new ConflictException("Email is already registered");
         }
+        if (userRepository.existsByUsernameIgnoreCase(request.username())) {
+            throw new ConflictException("Username is already taken");
+        }
         UserAccount user = new UserAccount();
+        user.setUsername(request.username().trim());
         user.setEmail(request.email().trim().toLowerCase());
         user.setPasswordHash(passwordEncoder.encode(request.password()));
         user.setRole(Role.USER);
@@ -47,6 +51,6 @@ public class AuthService {
     }
 
     public static UserResponse toResponse(UserAccount user) {
-        return new UserResponse(user.getId(), user.getEmail(), user.getRole());
+        return new UserResponse(user.getId(), user.getUsername(), user.getEmail(), user.getRole());
     }
 }

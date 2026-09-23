@@ -27,6 +27,7 @@ public class DemoDataInitializer implements ApplicationRunner {
         }
         UserAccount admin = new UserAccount();
         admin.setEmail("admin@stockly.local");
+        admin.setUsername("admin");
         admin.setPasswordHash(passwordEncoder.encode("Admin@123"));
         admin.setRole(Role.ADMIN);
         userRepository.save(admin);

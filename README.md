@@ -40,6 +40,7 @@ Demo admin (seeded on first start):
 
 - Email: `admin@stockly.local`
 - Password: `Admin@123`
+- Username: `admin`
 
 ## Run the UI
 
