@@ -47,7 +47,7 @@ public class ProductService {
                 .orElseThrow(() -> new NotFoundException("Product not found: " + id));
     }
 
-    @CacheEvict(cacheNames = {CacheConfig.PRODUCTS, CacheConfig.PRODUCT_LISTS}, allEntries = true)
+    @CacheEvict(cacheNames = {CacheConfig.PRODUCTS, CacheConfig.PRODUCT_LISTS, CacheConfig.CATEGORIES}, allEntries = true)
     @Transactional
     public ProductResponse create(ProductRequest request) {
         if (productRepository.existsBySkuIgnoreCase(request.sku())) {
@@ -59,7 +59,7 @@ public class ProductService {
         return ProductMapper.toResponse(productRepository.save(product));
     }
 
-    @CacheEvict(cacheNames = {CacheConfig.PRODUCTS, CacheConfig.PRODUCT_LISTS}, allEntries = true)
+    @CacheEvict(cacheNames = {CacheConfig.PRODUCTS, CacheConfig.PRODUCT_LISTS, CacheConfig.CATEGORIES}, allEntries = true)
     @Transactional
     public ProductResponse update(Long id, ProductRequest request) {
         Product product = getEntity(id);

@@ -221,6 +221,12 @@ button.danger {
   background: var(--danger);
 }
 
+table button {
+  margin-top: 0;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+}
+
 .row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));

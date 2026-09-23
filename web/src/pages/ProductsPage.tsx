@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { api, ApiError } from "../api";
 import { useAuth } from "../auth";
 
-type Category = { id: number; name: string };
+type Category = { id: number; name: string; productCount: number };
 type Product = {
   id: number;
   sku: string;
@@ -70,7 +70,18 @@ export default function ProductsPage() {
     }
   }
 
-  async function saveProduct(event: FormEvent) {
+  async function deleteCategory(id: number) {
+    setError("");
+    try {
+      await api(`/api/v1/categories/${id}`, { method: "DELETE" });
+      if (form.categoryId === String(id)) {
+        setForm({ ...form, categoryId: "" });
+      }
+      await load();
+    } catch (err) {
+      setError((err as ApiError).message);
+    }
+  }
     event.preventDefault();
     const payload = {
       sku: form.sku,
@@ -135,9 +146,40 @@ export default function ProductsPage() {
       {admin ? (
         <>
           <form className="card" onSubmit={saveCategory}>
-            <h2>New category</h2>
-            <input value={newCategory} onChange={(e) => setNewCategory(e.target.value)} required />
+            <h2>Categories</h2>
+            <div className="row">
+              <div>
+                <label>New category</label>
+                <input value={newCategory} onChange={(e) => setNewCategory(e.target.value)} required />
+              </div>
+            </div>
             <button type="submit">Add category</button>
+            {categories.length === 0 ? (
+              <p className="muted">No categories yet.</p>
+            ) : (
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Products</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {categories.map((c) => (
+                    <tr key={c.id}>
+                      <td>{c.name}</td>
+                      <td>{c.productCount}</td>
+                      <td>
+                        <button className="danger" type="button" onClick={() => void deleteCategory(c.id)}>
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </form>
           <form className="card" onSubmit={saveProduct}>
             <h2>{editingId ? "Edit product" : "New product"}</h2>
@@ -195,7 +237,29 @@ export default function ProductsPage() {
           </form>
         </>
       ) : (
-        <p className="muted">Product create/edit is admin-only.</p>
+        <div className="card">
+          <h2>Categories</h2>
+          {categories.length === 0 ? (
+            <p className="muted">No categories yet.</p>
+          ) : (
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Products</th>
+                </tr>
+              </thead>
+              <tbody>
+                {categories.map((c) => (
+                  <tr key={c.id}>
+                    <td>{c.name}</td>
+                    <td>{c.productCount}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       )}
 
       <div className="card">
