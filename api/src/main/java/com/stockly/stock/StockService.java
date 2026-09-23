@@ -3,6 +3,7 @@ package com.stockly.stock;
 import com.stockly.common.config.CacheConfig;
 import com.stockly.common.exception.NotFoundException;
 import com.stockly.product.Product;
+import com.stockly.product.ProductMapper;
 import com.stockly.product.ProductRepository;
 import com.stockly.product.dto.ProductResponse;
 import com.stockly.product.dto.StockAdjustRequest;

@@ -1,0 +1,129 @@
+:root {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  color: #e8eef8;
+  background: #0f141c;
+  line-height: 1.45;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  color: #8ec5ff;
+}
+
+.layout {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem 3rem;
+}
+
+.nav {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #2a3544;
+}
+
+.nav a {
+  text-decoration: none;
+}
+
+.nav .brand {
+  font-weight: 700;
+  color: #fff;
+  margin-right: auto;
+}
+
+.card {
+  background: #18202b;
+  border: 1px solid #2a3544;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  margin: 0.6rem 0 0.25rem;
+  color: #b7c3d3;
+}
+
+input,
+select,
+button {
+  font: inherit;
+}
+
+input,
+select {
+  width: 100%;
+  background: #0f141c;
+  color: #e8eef8;
+  border: 1px solid #3a4658;
+  border-radius: 8px;
+  padding: 0.5rem 0.65rem;
+}
+
+button {
+  margin-top: 0.8rem;
+  background: #2d6cdf;
+  color: white;
+  border: 0;
+  border-radius: 8px;
+  padding: 0.5rem 0.9rem;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: #3a4658;
+}
+
+button.danger {
+  background: #b42318;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.75rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.5rem 0.4rem;
+  border-bottom: 1px solid #2a3544;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  background: #7a3b11;
+  font-size: 0.75rem;
+}
+
+.error {
+  color: #ffb4ab;
+  margin: 0.5rem 0;
+}
+
+.muted {
+  color: #9aabbf;
+}
