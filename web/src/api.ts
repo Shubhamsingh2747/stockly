@@ -39,10 +39,19 @@ export async function api<T>(path: string, options: RequestInit = {}): Promise<T
   const headers = new Headers(options.headers);
   headers.set("Content-Type", "application/json");
   const token = getToken();
-  if (token) {
+  const isAuthCall = path.startsWith("/api/v1/auth/login") || path.startsWith("/api/v1/auth/register");
+  if (token && !isAuthCall) {
     headers.set("Authorization", `Bearer ${token}`);
   }
-  const response = await fetch(`${API_URL}${path}`, { ...options, headers });
+  let response: Response;
+  try {
+    response = await fetch(`${API_URL}${path}`, { ...options, headers });
+  } catch {
+    throw {
+      status: 0,
+      message: "Cannot reach the API. Start it with mvn spring-boot:run in api/ (http://localhost:8080).",
+    } satisfies ApiError;
+  }
   if (response.status === 204) {
     return undefined as T;
   }
