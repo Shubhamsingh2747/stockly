@@ -1,6 +1,6 @@
 # Stockly
 
-Inventory and orders REST API (Spring Boot 3) plus a thin React UI for demos. Resume-focused backend: JWT auth, PostgreSQL, Flyway, optional Redis cache, and stock updates through a strategy pattern.
+Inventory and orders REST API (Spring Boot 3) plus a thin React UI.
 
 ## Stack
 
