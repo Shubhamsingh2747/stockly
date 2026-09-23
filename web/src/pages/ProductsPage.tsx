@@ -82,6 +82,8 @@ export default function ProductsPage() {
       setError((err as ApiError).message);
     }
   }
+
+  async function saveProduct(event: FormEvent) {
     event.preventDefault();
     const payload = {
       sku: form.sku,
