@@ -2,6 +2,7 @@ package com.stockly.common.api;
 
 import com.stockly.common.exception.BusinessException;
 import com.stockly.common.exception.ConflictException;
+import com.stockly.common.exception.ForbiddenException;
 import com.stockly.common.exception.NotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -23,6 +24,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiError> notFound(NotFoundException ex) {
         return respond(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ApiError> forbidden(ForbiddenException ex) {
+        return respond(HttpStatus.FORBIDDEN, ex.getMessage());
     }
 
     @ExceptionHandler(ConflictException.class)

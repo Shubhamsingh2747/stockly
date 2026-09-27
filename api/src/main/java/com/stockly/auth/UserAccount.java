@@ -37,6 +37,9 @@ public class UserAccount {
     @Column(nullable = false)
     private Role role;
 
+    @Column(nullable = false)
+    private boolean enabled = true;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();
 }

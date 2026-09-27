@@ -7,6 +7,7 @@ import ProductsPage from "./pages/ProductsPage";
 import SalesPage from "./pages/SalesPage";
 import PurchasesPage from "./pages/PurchasesPage";
 import MovementsPage from "./pages/MovementsPage";
+import UsersPage from "./pages/UsersPage";
 
 function Guard({ children }: { children: ReactNode }) {
   const { user } = useAuth();
@@ -93,6 +94,14 @@ function Shell() {
           element={
             <Guard>
               <PurchasesPage />
+            </Guard>
+          }
+        />
+        <Route
+          path="/users"
+          element={
+            <Guard>
+              <UsersPage />
             </Guard>
           }
         />

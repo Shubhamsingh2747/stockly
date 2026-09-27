@@ -36,6 +36,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 var claims = jwtService.parse(token);
                 String email = claims.getSubject();
                 userRepository.findByEmailIgnoreCase(email).ifPresent(user -> {
+                    if (!user.isEnabled()) {
+                        SecurityContextHolder.clearContext();
+                        return;
+                    }
                     var auth = new UsernamePasswordAuthenticationToken(
                             user,
                             null,

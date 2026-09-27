@@ -44,6 +44,9 @@ public class AuthService {
     public AuthResponse login(LoginRequest request) {
         UserAccount user = userRepository.findByEmailIgnoreCase(request.email())
                 .orElseThrow(() -> new BadCredentialsException("bad credentials"));
+        if (!user.isEnabled()) {
+            throw new BadCredentialsException("bad credentials");
+        }
         if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
             throw new BadCredentialsException("bad credentials");
         }
@@ -51,6 +54,12 @@ public class AuthService {
     }
 
     public static UserResponse toResponse(UserAccount user) {
-        return new UserResponse(user.getId(), user.getUsername(), user.getEmail(), user.getRole());
+        return new UserResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole(),
+                user.isEnabled(),
+                user.getCreatedAt());
     }
 }

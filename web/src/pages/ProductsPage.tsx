@@ -117,6 +117,11 @@ export default function ProductsPage() {
         <Link className="btn secondary" to="/sales">
           Sales orders
         </Link>
+        {admin ? (
+          <Link className="btn secondary" to="/users">
+            Manage users
+          </Link>
+        ) : null}
       </p>
       {error ? <p className="error">{error}</p> : null}
       <div className="card">
