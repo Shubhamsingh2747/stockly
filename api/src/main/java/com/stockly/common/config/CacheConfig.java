@@ -1,5 +1,10 @@
 package com.stockly.common.config;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisURI;
 import java.time.Duration;
@@ -17,6 +22,7 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 @EnableCaching
@@ -39,8 +45,10 @@ public class CacheConfig {
                 factory.afterPropertiesSet();
                 RedisCacheConfiguration defaults = RedisCacheConfiguration.defaultCacheConfig()
                         .entryTtl(Duration.ofMinutes(5))
+                        .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(
+                                new StringRedisSerializer()))
                         .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(
-                                new GenericJackson2JsonRedisSerializer()));
+                                redisValueSerializer()));
                 log.info("Product cache using Redis at {}:{}", host, port);
                 return RedisCacheManager.builder(factory).cacheDefaults(defaults).build();
             } catch (Exception ex) {
@@ -51,6 +59,28 @@ public class CacheConfig {
                     host, port);
         }
         return new ConcurrentMapCacheManager(PRODUCTS, PRODUCT_LISTS, CATEGORIES);
+    }
+
+    /**
+     * Records are final, so default Jackson typing omits {@code @class} and Redis
+     * returns LinkedHashMap on the next read (ClassCastException / HTTP 500).
+     */
+    private static GenericJackson2JsonRedisSerializer redisValueSerializer() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mapper.activateDefaultTyping(
+                BasicPolymorphicTypeValidator.builder()
+                        .allowIfSubType("com.stockly.")
+                        .allowIfSubType("java.util.")
+                        .allowIfSubType("java.lang.")
+                        .allowIfSubType("java.math.")
+                        .allowIfSubType("java.time.")
+                        .allowIfSubType("[")
+                        .build(),
+                ObjectMapper.DefaultTyping.EVERYTHING,
+                JsonTypeInfo.As.PROPERTY);
+        return new GenericJackson2JsonRedisSerializer(mapper);
     }
 
     private boolean isRedisReachable(String host, int port) {

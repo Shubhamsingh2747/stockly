@@ -4,6 +4,8 @@ import com.stockly.common.exception.BusinessException;
 import com.stockly.common.exception.ConflictException;
 import com.stockly.common.exception.NotFoundException;
 import jakarta.validation.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiError> notFound(NotFoundException ex) {
@@ -62,6 +66,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> fallback(Exception ex) {
+        log.error("Unhandled error", ex);
         return respond(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error");
     }
 
