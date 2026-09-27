@@ -2,5 +2,6 @@ package com.stockly.auth;
 
 public enum Role {
     ADMIN,
-    USER
+    USER,
+    VIEWER
 }

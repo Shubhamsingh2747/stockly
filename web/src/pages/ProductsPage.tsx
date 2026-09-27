@@ -19,6 +19,7 @@ type Product = {
 export default function ProductsPage() {
   const { user } = useAuth();
   const admin = user?.role === "ADMIN";
+  const canTrade = user?.role === "ADMIN" || user?.role === "USER";
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [sku, setSku] = useState("");
@@ -293,12 +294,16 @@ export default function ProductsPage() {
                 <td>{p.unitPrice}</td>
                 <td className="col-actions">
                   <div className="actions">
-                    <Link className="btn" to={`/purchases?productId=${p.id}`}>
-                      Receive stock
-                    </Link>
-                    <Link className="btn secondary" to={`/sales?productId=${p.id}`}>
-                      Sell
-                    </Link>
+                    {canTrade ? (
+                      <>
+                        <Link className="btn" to={`/purchases?productId=${p.id}`}>
+                          Receive stock
+                        </Link>
+                        <Link className="btn secondary" to={`/sales?productId=${p.id}`}>
+                          Sell
+                        </Link>
+                      </>
+                    ) : null}
                     {admin ? (
                       <button
                         className="btn-edit"

@@ -42,6 +42,12 @@ Demo admin (seeded on first start):
 - Password: `Admin@123`
 - Username: `admin`
 
+Roles:
+
+- `ADMIN` — catalog, stock adjust, user management, and orders
+- `USER` — view catalog and create/confirm/receive/cancel orders
+- `VIEWER` — read-only (products, categories, orders, stock history)
+
 ## Run the UI
 
 ```bash
@@ -60,7 +66,7 @@ UI: http://localhost:5173 (CORS is enabled for this origin on the `local` profil
 | Categories | `GET/POST /api/v1/categories` (`POST` is `ADMIN`) |
 | Products | `GET/POST/PUT /api/v1/products`, filters `sku`, `category`, `lowStock` |
 | Stock | `POST /api/v1/products/{id}/adjust-stock` (`ADMIN`), `GET /api/v1/products/{id}/movements` |
-| Sales | `POST /api/v1/sales-orders`, `POST .../{id}/confirm`, `POST .../{id}/cancel` |
+| Sales | `GET/POST /api/v1/sales-orders`, `POST .../{id}/confirm`, `POST .../{id}/cancel` (`ADMIN`/`USER` for writes) |
 | Users | `GET/POST /api/v1/users`, `PATCH /api/v1/users/{id}`, `POST .../{id}/reset-password` (`ADMIN`) |
 
 Confirming a sales order decrements stock in one transaction (optimistic locking on product `version`). Receiving a purchase order increments stock. Low-stock events go through `InventoryEventPublisher` (logging today; Kafka later on topic `inventory.events`).

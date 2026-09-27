@@ -6,6 +6,7 @@ import com.stockly.sales.dto.SalesOrderResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +38,7 @@ public class SalesOrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public SalesOrderResponse create(
             @Valid @RequestBody SalesOrderRequest request,
             @AuthenticationPrincipal UserAccount user) {
@@ -44,11 +46,13 @@ public class SalesOrderController {
     }
 
     @PostMapping("/{id}/confirm")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public SalesOrderResponse confirm(@PathVariable Long id) {
         return salesOrderService.confirm(id);
     }
 
     @PostMapping("/{id}/cancel")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public SalesOrderResponse cancel(@PathVariable Long id) {
         return salesOrderService.cancel(id);
     }

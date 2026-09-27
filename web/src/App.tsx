@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Navigate, NavLink, Route, Routes, useNavigate } from "react-router-dom";
+import { roleLabel } from "./api";
 import { AuthProvider, useAuth } from "./auth";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -38,7 +39,7 @@ function Shell() {
           <div className="nav-end">
             <div className="user-block">
               <span className="user-name">{user.username || user.email.split("@")[0]}</span>
-              <span className="user-role">{user.role === "ADMIN" ? "Administrator" : "User"}</span>
+              <span className="user-role">{roleLabel(user.role)}</span>
             </div>
             <button className="logout" type="button" onClick={onLogout}>
               Sign out

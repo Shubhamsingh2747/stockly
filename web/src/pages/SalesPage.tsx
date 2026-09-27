@@ -1,12 +1,15 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { api, ApiError } from "../api";
+import { useAuth } from "../auth";
 
 type Product = { id: number; sku: string; name: string; stockQuantity: number };
 type Line = { productId: number; sku: string; quantity: number; unitPrice: number };
 type Order = { id: number; status: string; createdByEmail: string; createdAt: string; lines: Line[] };
 
 export default function SalesPage() {
+  const { user } = useAuth();
+  const canTrade = user?.role === "ADMIN" || user?.role === "USER";
   const [searchParams] = useSearchParams();
   const [orders, setOrders] = useState<Order[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
@@ -66,6 +69,7 @@ export default function SalesPage() {
     <>
       <h1>Sales orders</h1>
       {error ? <p className="error">{error}</p> : null}
+      {canTrade ? (
       <form className="card" onSubmit={create}>
         <h2>New draft</h2>
         <div className="row">
@@ -86,6 +90,9 @@ export default function SalesPage() {
         </div>
         <button type="submit">Create draft</button>
       </form>
+      ) : (
+        <p className="muted">Viewer accounts can see orders but cannot create or change them.</p>
+      )}
       <div className="card">
         <table>
           <thead>
@@ -103,12 +110,12 @@ export default function SalesPage() {
                 <td>{o.status}</td>
                 <td>{o.lines.map((l) => `${l.sku} x${l.quantity}`).join(", ")}</td>
                 <td>
-                  {o.status === "DRAFT" ? (
+                  {canTrade && o.status === "DRAFT" ? (
                     <button type="button" onClick={() => void act(o.id, "confirm")}>
                       Confirm
                     </button>
                   ) : null}
-                  {o.status !== "CANCELLED" ? (
+                  {canTrade && o.status !== "CANCELLED" ? (
                     <button className="danger" type="button" onClick={() => void act(o.id, "cancel")}>
                       Cancel
                     </button>

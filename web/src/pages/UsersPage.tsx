@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-import { api, ApiError, type Role, type User } from "../api";
+import { api, ApiError, ROLE_OPTIONS, type Role, type User } from "../api";
 import { useAuth } from "../auth";
 
 type ManagedUser = User & { enabled: boolean; createdAt?: string };
@@ -126,8 +126,11 @@ export default function UsersPage() {
           <div>
             <label>Role</label>
             <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value as Role })}>
-              <option value="USER">User</option>
-              <option value="ADMIN">Administrator</option>
+              {ROLE_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
             </select>
           </div>
         </div>
@@ -169,19 +172,28 @@ export default function UsersPage() {
               <tr key={u.id}>
                 <td>{u.username}</td>
                 <td>{u.email}</td>
-                <td>{u.role === "ADMIN" ? "Administrator" : "User"}</td>
+                <td>
+                  <select
+                    className="role-select"
+                    value={u.role}
+                    aria-label={`Role for ${u.username}`}
+                    onChange={(e) => {
+                      const role = e.target.value as Role;
+                      if (role !== u.role) {
+                        void patchUser(u.id, { role });
+                      }
+                    }}
+                  >
+                    {ROLE_OPTIONS.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </td>
                 <td>{u.enabled ? "Active" : "Disabled"}</td>
                 <td className="col-actions">
                   <div className="actions">
-                    {u.role === "ADMIN" ? (
-                      <button className="btn-edit" type="button" onClick={() => void patchUser(u.id, { role: "USER" })}>
-                        Make user
-                      </button>
-                    ) : (
-                      <button className="btn-edit" type="button" onClick={() => void patchUser(u.id, { role: "ADMIN" })}>
-                        Make admin
-                      </button>
-                    )}
                     <button
                       className={u.enabled ? "danger" : "btn-edit"}
                       type="button"

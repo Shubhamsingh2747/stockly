@@ -3,7 +3,17 @@ export const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8080";
 const TOKEN_KEY = "stockly.token";
 const USER_KEY = "stockly.user";
 
-export type Role = "ADMIN" | "USER";
+export type Role = "ADMIN" | "USER" | "VIEWER";
+
+export const ROLE_OPTIONS: { value: Role; label: string }[] = [
+  { value: "USER", label: "User" },
+  { value: "VIEWER", label: "Viewer" },
+  { value: "ADMIN", label: "Administrator" },
+];
+
+export function roleLabel(role: Role): string {
+  return ROLE_OPTIONS.find((option) => option.value === role)?.label ?? role;
+}
 
 export type User = {
   id: number;

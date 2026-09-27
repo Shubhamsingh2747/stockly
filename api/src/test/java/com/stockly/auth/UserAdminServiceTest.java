@@ -85,4 +85,19 @@ class UserAdminServiceTest {
                 .isInstanceOf(BusinessException.class)
                 .hasMessageContaining("last active administrator");
     }
+
+    @Test
+    void canAssignViewerRole() {
+        UserAccount clerk = new UserAccount();
+        clerk.setId(3L);
+        clerk.setUsername("clerk");
+        clerk.setEmail("clerk@stockly.local");
+        clerk.setRole(Role.USER);
+        clerk.setEnabled(true);
+        when(userRepository.findById(3L)).thenReturn(Optional.of(clerk));
+
+        var response = userAdminService.update(3L, new UpdateUserRequest(Role.VIEWER, null), admin);
+
+        assertThat(response.role()).isEqualTo(Role.VIEWER);
+    }
 }

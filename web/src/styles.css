@@ -154,6 +154,12 @@ a.btn.secondary {
   text-align: right;
 }
 
+.role-select {
+  width: auto;
+  min-width: 11rem;
+  margin: 0;
+}
+
 .actions .btn,
 .actions .btn-edit {
   margin: 0;
