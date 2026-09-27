@@ -62,7 +62,6 @@ class OperationsServiceTest {
         movement.setCreatedAt(Instant.parse("2026-09-27T10:00:00Z"));
 
         when(productRepository.findLowStock()).thenReturn(List.of(widget));
-        when(productRepository.countLowStock()).thenReturn(1L);
         when(salesOrderRepository.countByStatus(SalesOrderStatus.DRAFT)).thenReturn(3L);
         when(purchaseOrderRepository.countByStatus(PurchaseOrderStatus.DRAFT)).thenReturn(2L);
         when(movementRepository.findTop20ByOrderByCreatedAtDesc()).thenReturn(List.of(movement));

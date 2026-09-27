@@ -39,7 +39,7 @@ public class OperationsService {
                 .map(OperationsService::toRecent)
                 .toList();
         return new OperationsSnapshotResponse(
-                productRepository.countLowStock(),
+                lowStock.size(),
                 salesOrderRepository.countByStatus(SalesOrderStatus.DRAFT),
                 purchaseOrderRepository.countByStatus(PurchaseOrderStatus.DRAFT),
                 lowStock,
