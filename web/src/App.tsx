@@ -8,6 +8,7 @@ import ProductsPage from "./pages/ProductsPage";
 import SalesPage from "./pages/SalesPage";
 import PurchasesPage from "./pages/PurchasesPage";
 import MovementsPage from "./pages/MovementsPage";
+import OperationsPage from "./pages/OperationsPage";
 import UsersPage from "./pages/UsersPage";
 
 function Guard({ children }: { children: ReactNode }) {
@@ -17,7 +18,7 @@ function Guard({ children }: { children: ReactNode }) {
 
 function GuestOnly({ children }: { children: ReactNode }) {
   const { user } = useAuth();
-  return user ? <Navigate to="/" replace /> : <>{children}</>;
+  return user ? <Navigate to="/operations" replace /> : <>{children}</>;
 }
 
 function Shell() {
@@ -32,9 +33,27 @@ function Shell() {
   return (
     <div className="layout">
       <nav className="nav">
-        <NavLink className="brand" to={user ? "/" : "/login"}>
-          Stockly
-        </NavLink>
+        <div className="nav-start">
+          <NavLink className="brand" to={user ? "/operations" : "/login"}>
+            Stockly
+          </NavLink>
+          {user ? (
+            <div className="nav-links">
+              <NavLink className="page-link" to="/operations">
+                Operations
+              </NavLink>
+              <NavLink className="page-link" to="/">
+                Products
+              </NavLink>
+              <NavLink className="page-link" to="/purchases">
+                Purchases
+              </NavLink>
+              <NavLink className="page-link" to="/sales">
+                Sales
+              </NavLink>
+            </div>
+          ) : null}
+        </div>
         {user ? (
           <div className="nav-end">
             <div className="user-block">
@@ -79,6 +98,14 @@ function Shell() {
           element={
             <Guard>
               <ProductsPage />
+            </Guard>
+          }
+        />
+        <Route
+          path="/operations"
+          element={
+            <Guard>
+              <OperationsPage />
             </Guard>
           }
         />

@@ -12,4 +12,6 @@ public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrder, Lo
 
     @EntityGraph(attributePaths = {"lines", "lines.product", "createdBy"})
     Optional<PurchaseOrder> findById(Long id);
+
+    long countByStatus(PurchaseOrderStatus status);
 }

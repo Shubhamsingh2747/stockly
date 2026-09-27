@@ -12,4 +12,6 @@ public interface SalesOrderRepository extends JpaRepository<SalesOrder, Long> {
 
     @EntityGraph(attributePaths = {"lines", "lines.product", "createdBy"})
     Optional<SalesOrder> findById(Long id);
+
+    long countByStatus(SalesOrderStatus status);
 }

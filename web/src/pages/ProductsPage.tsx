@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { api, ApiError } from "../api";
 import { useAuth } from "../auth";
 
@@ -20,11 +20,12 @@ export default function ProductsPage() {
   const { user } = useAuth();
   const admin = user?.role === "ADMIN";
   const canTrade = user?.role === "ADMIN" || user?.role === "USER";
+  const [searchParams] = useSearchParams();
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [sku, setSku] = useState("");
   const [category, setCategory] = useState("");
-  const [lowStock, setLowStock] = useState(false);
+  const [lowStock, setLowStock] = useState(searchParams.get("lowStock") === "1");
   const [error, setError] = useState("");
   const [newCategory, setNewCategory] = useState("");
   const [form, setForm] = useState({
@@ -51,6 +52,21 @@ export default function ProductsPage() {
       ]);
       setCategories(cats);
       setProducts(items);
+      const editId = searchParams.get("edit");
+      if (admin && editId) {
+        const match = items.find((p) => String(p.id) === editId);
+        if (match) {
+          setEditingId(match.id);
+          setForm({
+            sku: match.sku,
+            name: match.name,
+            categoryId: String(match.categoryId),
+            unitPrice: String(match.unitPrice),
+            stockQuantity: String(match.stockQuantity),
+            reorderLevel: String(match.reorderLevel),
+          });
+        }
+      }
     } catch (err) {
       setError((err as ApiError).message);
     }
@@ -112,7 +128,10 @@ export default function ProductsPage() {
     <>
       <h1>Products</h1>
       <p>
-        <Link className="btn" to="/purchases">
+        <Link className="btn" to="/operations">
+          Operations
+        </Link>
+        <Link className="btn secondary" to="/purchases">
           Purchase orders
         </Link>
         <Link className="btn secondary" to="/sales">

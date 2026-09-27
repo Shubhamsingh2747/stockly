@@ -19,7 +19,7 @@ export default function LoginPage() {
         body: JSON.stringify({ email, password }),
       });
       login(result.token, result.user);
-      navigate("/");
+      navigate("/operations");
     } catch (err) {
       setError((err as ApiError).message);
     }

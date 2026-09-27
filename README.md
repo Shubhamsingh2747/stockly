@@ -56,7 +56,7 @@ npm install
 npm run dev
 ```
 
-UI: http://localhost:5173 (CORS is enabled for this origin on the `local` profile).
+UI: http://localhost:5173 (CORS is enabled for this origin on the `local` profile). Signed-in users land on **Operations** from the brand/nav.
 
 ## Main APIs
 
@@ -65,6 +65,7 @@ UI: http://localhost:5173 (CORS is enabled for this origin on the `local` profil
 | Auth | `POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `GET /api/v1/auth/me` |
 | Categories | `GET/POST /api/v1/categories` (`POST` is `ADMIN`) |
 | Products | `GET/POST/PUT /api/v1/products`, filters `sku`, `category`, `lowStock` |
+| Operations | `GET /api/v1/operations` (low-stock counts, open drafts, recent movements; all authenticated roles) |
 | Stock | `POST /api/v1/products/{id}/adjust-stock` (`ADMIN`), `GET /api/v1/products/{id}/movements` |
 | Sales | `GET/POST /api/v1/sales-orders`, `POST .../{id}/confirm`, `POST .../{id}/cancel` (`ADMIN`/`USER` for writes) |
 | Users | `GET/POST /api/v1/users`, `PATCH /api/v1/users/{id}`, `POST .../{id}/reset-password` (`ADMIN`) |
